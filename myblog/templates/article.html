@@ -1,0 +1,46 @@
+{% extends "index.html" %}
+{% block main %}
+    {% if posts.total == 0  %}
+        <div class="container-border text-center m-2">
+            There is currently no content in this section
+        </div>
+    {% else %}
+        <div class="container-border">
+            {% for post in posts.items %}
+                <article class="container">
+                    <h3><a href="{{ url_for('main.anarticle', post_id=post.id, user=user.username) }}">{{ post.title }}</a></h3>
+                    <div class="media border-bottom mb-2 pb-1 ">
+                        <img class="mr-3 article-img img-fluid rounded-circle" src="{{ post.author.image_file }}" alt="prifile image">
+                        <div class="media-body ">{{ post.author.username }}
+                        </div>
+                        <span class="ml-2 text-muted ">{{ post.data_posted.strftime("%m/%d/%Y") }}</span>
+                    </div>
+                    <p class="article-content">{{ post.content }}</p>
+                </article>
+            {% endfor %}
+                <div class="container row justify-content-center mb-3 align-items-baseline">
+                    {% if prev_url %}
+                    <a class="text-dark" href="{{ prev_url }}">prev</a>
+                    {% endif %}
+
+                    {% for page in posts.iter_pages(left_edge=0, right_edge=0, left_current=2,right_current=3) %}
+                        {% if page %}
+                            {% if posts.page == page %}
+                                <a class="btn page-active-outline" href="{{ url_for('main.project', user= user.username,
+                                    page = page)}}">{{ page }}</a>
+                            {% else %}
+                                <a class="btn page-outline" href="{{ url_for('main.project', user= user.username,
+                                    page = page)}}">{{ page }}</a>
+                            {% endif %}
+                        {% else %}
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if next_url %}
+                    <a class="text-dark" href="{{ next_url }}">next</a>
+                    {% endif %}
+                </div>
+        </div>
+    {% endif %}
+{% endblock main %}
+

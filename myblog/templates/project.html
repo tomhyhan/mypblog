@@ -1,0 +1,219 @@
+{% extends "index.html" %}
+{% block main %}
+    {% if posts.total == 0  %}
+        <div class="container-border text-center m-2">
+            There is currently no content in this section
+        </div>
+    {% else %}
+        <div class="container-border toggles">
+            {% for post in posts.items %}
+                <article class="container">
+                    <h3><a href="{{ url_for('main.aproject', post_id=post.id, user=user.username) }}">{{ post.title }}</a></h3>
+                    <div class="media border-bottom mb-2 pb-1 ">
+                        <img class="mr-3 article-img img-fluid rounded-circle" src="{{ post.author.image_file }}" alt="prifile image">
+                        <div class="media-body ">{{ post.author.username }}
+                        </div>
+                        <span class="ml-2 text-muted ">{{ post.data_posted.strftime("%m/%d/%Y") }}</span>
+                    </div>
+                    <p class="article-content">{{ post.content }}</p>
+                    <button class="btn comment-border p-0 m-0 mb-2 " data-toggle="collapse"
+                            data-target="#{{ 'a'+post.id|string }}" role="button" aria-expanded="false" aria-controls="comment-collapse">
+                        <img class="img-fluid message-img" src="https://myblog-files-tom.s3.ca-central-1.amazonaws.com/img/message.png" alt="comment img">
+                        Comment{% if post.replies|length >= 1 %}<span class="ml-1 badge badge-info">{{ post.replies|length }}</span>{% endif %}
+                        <img  class="comment-toggle" src="https://myblog-files-tom.s3.ca-central-1.amazonaws.com/img/down-a.png" alt="down-arrow">
+                    </button>
+
+                    <div class="collapse" id="{{ 'a'+post.id|string }}">
+                        {% for reply in replies.filter_by(project_id=post.id).all() %}
+                            <div class="d-flex flex-column border-bottom mb-2">
+                                <h5 class="p-0 m-0"><strong>{{ reply.username }}</strong></h5>
+                                <p class="p-0 m-0 mb-1">{{ reply.content }}</p>
+                                <div class="d-flex">
+                                <div class="d-inline mr-2"><small >{{ reply.date_posted.strftime("%Y.%m.%d") }}</small>
+                                </div>
+                                <button class="btn p-0 m-0 mb-2 d-inline text-muted" data-toggle="collapse"
+                                    data-target="#{{'b'+reply.id|string}}" role="button" aria-expanded="false" aria-controls="comment-collapse">
+                                <img class="img-fluid reply-img" src="https://myblog-files-tom.s3.ca-central-1.amazonaws.com/img/reply.png" alt="comment img">
+                                Reply
+                                 </button>
+                                 {% if reply.username == current_user.username %}
+                                    <form class="ml-3" action="{{ url_for('main.reply_delete', reply_id=reply.id, user=user.username) }}" method="post">
+                                        <input class="text-muted btn btn-sm" type="submit" value="Delete">
+                                    </form>
+{#                                    <div class="d-inline ml-3">#}
+{#                                        <small><a href="#" class="text-muted"#}
+{#                                        data-toggle="modal" data-target="#reply"> Delete</a></small>#}
+{#                                    </div>#}
+
+                                     {# --> modal # need better logic}
+{#                                        <div class="modal fade" id="reply" tabindex="-5" role="dialog" aria-labelledby="reply" aria-hidden="true">#}
+{#                                            <div class="modal-dialog" role="document">#}
+{#                                                <div class="modal-content">#}
+{#                                                  <div class="modal-header border-bottom-0 pb-0">#}
+{#                                                    <h5 class="modal-title" id="reply-label">Are you sure?</h5>#}
+{#                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
+{#                                                      <span aria-hidden="true">&times;</span>#}
+{#                                                    </button>#}
+{#                                                  </div>#}
+{#                                                  <div class="modal-footer border-top-0">#}
+{#                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>#}
+{#                                                    <form action="{{ url_for('main.reply_delete', reply_id=reply.id, user=user.username) }}" method="post">#}
+{#                                                        <input class="btn btn-danger" type="submit" value="Delete">#}
+{#                                                    </form>#}
+{#                                                  </div>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                        </div>#}
+                                {% endif %}
+                                </div>
+                            </div>
+                            <div class="container reply-container">
+                                {% for tore in toreplies.filter_by(reply_id=reply.id).all()%}
+                                    <div class="d-flex align-items-baseline mb-1">
+                                        <span class="mr-2" style='font-size:20px;'>&#8735;</span>
+                                        <strong class="mr-2">{{ tore.username }}</strong>
+                                        <div class="d-flex flex-column">
+                                        <small class="mr-4 text-muted">{{ tore.date_posted.strftime("%Y.%m.%d") }}</small>
+                                        {% if tore.username == current_user.username %}
+{#                                                <small><a href="#" class="text-muted"#}
+{#                                                data-toggle="modal" data-target="#tore"> Delete</a></small>#}
+                                    <form class="" action="{{  url_for('main.tore_delete', tore_id=tore.id, user=user.username) }}" method="post">
+                                        <input class="text-muted btn btn-sm" type="submit" value="Delete">
+                                    </form>
+                                             {# --> modal.. need better logic#}
+{#                                                <div class="modal fade" id="tore"   tabindex="-5" role="dialog" aria-labelledby="tore" aria-hidden="true">#}
+{#                                                    <div class="modal-dialog" role="document">#}
+{#                                                        <div class="modal-content">#}
+{#                                                          <div class="modal-header border-bottom-0 pb-0">#}
+{#                                                            <h5 class="modal-title" id="tore-label">Are you sure?</h5>#}
+{#                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
+{#                                                              <span aria-hidden="true">&times;</span>#}
+{#                                                            </button>#}
+{#                                                          </div>#}
+{#                                                          <div class="modal-footer border-top-0">#}
+{#                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>#}
+{#                                                            <form action="{{ url_for('main.tore_delete', tore_id=tore.id, user=user.username) }}" method="post">#}
+{#                                                                <input class="btn btn-danger" type="submit" value="Delete">#}
+{#                                                            </form>#}
+{#                                                          </div>#}
+{#                                                        </div>#}
+{#                                                    </div>#}
+{#                                                </div>#}
+                                        {% endif %}
+                                        </div>
+                                        <p>{{ tore.content }}</p>
+                                    </div>
+                                {% endfor %}
+
+{#                           -----REPLY form#}
+                            {% if current_user.is_authenticated %}
+                                <div class="row mb-1 justify-content-center" >
+                                    <form class="m-2 collapse col-10" id='{{'b'+reply.id|string}}'
+                                          method="POST" action="">
+                                    {{ reply_form.hidden_tag() }}
+                                        <div class="input-group">
+                                            {{ reply_form.content.label(class='d-none') }}
+                                            {% if reply_form.content.errors %}
+                                                {{ reply_form.content(class="form-control is-invalid rounded",placeholder='Reply') }}
+                                                <div class="invalid-feedback">
+                                                    {% for error in reply_form.content.errors %}
+                                                        <span>{{ error }}</span>
+                                                    {% endfor %}
+                                                </div>
+                                            {% else %}
+                                                {{ reply_form.content(class="form-control d-inline rounded",placeholder='Reply') }}
+                                            {% endif %}
+                                            <div class="form-group mb-0 input-group-append rounded">
+                                                {{ reply_form.submit2(class='btn btn-info') }}
+                                            </div>
+                                        </div>
+                                        <div class="form-group d-none" >
+                                            {{ reply_form.id.label() }}
+                                            {{ reply_form.id(class="form-control", value=reply.id) }}
+                                        </div>
+                                    </form>
+                                </div>
+                            {% else %}
+                                <div class="row mb-1 collapse justify-content-center" id='{{'b'+reply.id|string}}'>
+                                    <div class="col-10 input-group rounded mb-2 mt-2">
+
+                                        <label class="d-none" for="textarea-none">Example textarea</label>
+                                        <textarea class="form-control d-inline rounded " id="textarea-none" rows="2" disabled>'Please Login to leave a Reply...'</textarea>
+
+                                        <button class="btn btn-secondary form-group mb-0 input-group-append" disabled>
+                                        Reply
+                                        </button>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            </div>
+
+
+                        {% endfor %}
+{#                    ---> comment form#}
+                    {% if current_user.is_authenticated %}
+                        <form class="mb-2" method="POST" action="">
+                            {{ form.hidden_tag() }}
+
+                            <div class="input-group rounded">
+                                {{ form.content.label(class='d-none') }}
+                                {% if form.content.errors %}
+                                    {{ form.content(class="form-control is-invalid",placeholder='Comment') }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.content.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.content(class="form-control d-inline",placeholder='Comment') }}
+                                {% endif %}
+                            <div class="form-group mb-0 input-group-append">
+                                {{ form.submit1(class='btn btn-info') }}
+                            </div>
+                            </div>
+                            <div class="form-group d-none rounded" >
+                                {{ form.id.label() }}
+                                {{ form.id(class="form-control", value=post.id) }}
+                            </div>
+                        </form>
+                    {% else %}
+                        <div class="input-group rounded mb-2">
+
+                            <label class="d-none" for="textarea-none">Example textarea</label>
+                            <textarea class="form-control d-inline rounded" id="textarea-none" rows="2" disabled>'Please Login to leave a comment...'</textarea>
+
+                            <button class="btn btn-secondary form-group mb-0 input-group-append" disabled>
+                            Post
+                            </button>
+                        </div>
+                    {% endif %}
+                    </div>
+                </article>
+
+            {% endfor %}
+                <div class="container row justify-content-center mb-3 align-items-baseline">
+                    {% if prev_url %}
+                    <a class="text-dark" href="{{ prev_url }}">prev</a>
+                    {% endif %}
+
+                    {% for page in posts.iter_pages(left_edge=0, right_edge=0, left_current=2,right_current=3) %}
+                        {% if page %}
+                            {% if posts.page == page %}
+                                <a class="btn page-active-outline" href="{{ url_for('main.project', user= user.username,
+                                    page = page)}}">{{ page }}</a>
+                            {% else %}
+                                <a class="btn page-outline" href="{{ url_for('main.project', user= user.username,
+                                    page = page)}}">{{ page }}</a>
+                            {% endif %}
+                        {% else %}
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if next_url %}
+                    <a class="text-dark" href="{{ next_url }}">next</a>
+                    {% endif %}
+                </div>
+        </div>
+    {% endif %}
+{% endblock main %}
+

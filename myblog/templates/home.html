@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="home-font">
+        <img class="card-img img-fluid vh-100" src="https://myblog-files-tom.s3.ca-central-1.amazonaws.com/img/back.jpg" alt="background-img">
+        <div class="position-fixed home-body">
+            <div class="d-flex flex-column align-items-end ">
+                <a class="home-a" href="{{ url_for('users.login') }}">Login</a>
+                <h1 class="home-title">Create your own blog</h1>
+                <a  class="btn btn-primary" href="{{ url_for('users.register') }}">Let's get started</a>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+

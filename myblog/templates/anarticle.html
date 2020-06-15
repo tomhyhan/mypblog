@@ -1,0 +1,44 @@
+{% extends "index.html" %}
+{% block main %}
+        <div class="container-border">
+        <article class="container">
+            <h3>{{ post.title }}</h3>
+            <div class="media border-bottom mb-2 pb-1 ">
+                <img class="mr-3 article-img img-fluid rounded-circle" src="{{ url_for('static', filename='profile_picture/' + post.author.image_file) }}" alt="prifile image">
+                <div class="media-body ">{{ post.author.username }}
+                </div>
+                {% if post.author == current_user %}
+                    <div class="d-inline">
+                        <small><a href="{{ url_for('main.anarticle_update', user = current_user.username,
+                           post_id = post.id) }}" class="text-muted">Update</a></small>
+                        <small><a href="#" class="text-muted"
+                        data-toggle="modal" data-target="#Delete-Modal"> Delete</a></small>
+                    </div>
+                {% endif %}
+                <span class="ml-2 text-muted ">{{ post.data_posted.strftime("%m/%d/%Y") }}</span>
+            </div>
+            <p class="article-content">{{ post.content }}</p>
+        </article>
+        </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="Delete-Modal" tabindex="-1" role="dialog" aria-labelledby="Delete-Modal" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header border-bottom-0 pb-0">
+            <h5 class="modal-title" id="Delete-Modal-Label">Are you sure?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-footer border-top-0">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <form action="{{ url_for('main.delete_anarticle', post_id=post.id, user=current_user.username) }}" method="post">
+                <input class="btn btn-danger" type="submit" value="Delete">
+            </form>
+          </div>
+        </div>
+      </div>
+</div>
+{% endblock main %}
+

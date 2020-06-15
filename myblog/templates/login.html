@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="container">
+        <div class="row vh-100 justify-content-center align-items-center">
+            <form class="col-sm-6 container-border" method="POST" action="">
+                {{ form.hidden_tag() }}
+                <fieldset class="form-group">
+                    <legend>Log In</legend>
+                    <div class="form-group">
+                        {{ form.email.label() }}
+                        {% if form.email.errors %}
+                            {{ form.email(class="form-control is-invalid",placeholder='Email') }}
+                            <div class="invalid-feedback">
+                                {% for error in form.email.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.email(class="form-control",placeholder='Email') }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.password.label() }}
+                        {% if form.password.errors %}
+                            {{ form.password(class="form-control is-invalid",placeholder='Password') }}
+                            <div class="invalid-feedback">
+                                {% for error in form.password.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.password(class="form-control",placeholder='Password') }}
+                        {% endif %}
+                    </div>
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                    <small>{{ message }}</small>
+                                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                    <div class="custom-control custom-switch mb-3">
+                        {{ form.remember(class="custom-control-input", type="checkbox", id='switch') }}
+                        {{ form.remember.label(class="custom-control-label", for='switch') }}
+                    </div>
+                    <div class="form-group mb-0">
+                        {{ form.submit(class='btn btn-block btn-info') }}
+                    </div>
+                </fieldset>
+                <div class="mt-0">
+                    <small class="text-muted">
+                        Forgot your <a href="{{ url_for('users.forgot_password')}}">Password?</a> <small>or</small> <a href="{{ url_for('users.register') }}">Create-account</a>
+                    </small>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock content %}

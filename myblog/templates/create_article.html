@@ -1,0 +1,48 @@
+{% extends "index.html" %}
+{% block main %}
+    <div class="container-border">
+        <div class="container">
+            <div class="row">
+                <form class="col-sm-12" method="POST" action="" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+                    <fieldset class="form-group">
+                        <legend>{{ legend }}</legend>
+                        <div class="form-group">
+                            {{ form.title.label() }}
+                            {% if form.title.errors %}
+                                {{ form.title(class="form-control is-invalid",placeholder='Title') }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.title.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.title(class="form-control",placeholder='Title') }}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            {{ form.content.label() }}
+                            {% if form.content.errors %}
+                                {{ form.content(class="form-control is-invalid",style="height: 200px;") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.content.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.content(class="form-control",style="height: 200px;") }}
+                            {% endif %}
+                        </div>
+                        <div class="form-group mb-0">
+                            {{ form.submit(class='btn btn-block btn-info') }}
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock main %}
+

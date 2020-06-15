@@ -1,0 +1,35 @@
+
+<div class="d-none d-md-block profile col-md-3 p-0 ">
+    <div class="container-border">
+        <div class="container card d-block col-11 mx-auto mt-1 container-profile" style="width: 18rem;">
+          <div class="card-body">
+            <img class="card-img-top img-fluid mb-2 rounded justify-content-center
+                d-block mx-auto profile-img" src="{{ user.image_file }}"
+                 alt="profile image">
+            <h5 class="card-title text-center">{{ user.username }}'s Blog</h5>
+            <p class="card-text">{{ user.description }}</p>
+            <div class="profile-menu">
+                <a class="text-muted profile-item" href="{{ url_for('users.static_profile', user=user.username) }}">Profile</a>
+                <a class="text-muted profile-item" href="#"> Note</a>
+            </div>
+              {% if current_user.is_authenticated %}
+                  {% if user.username == current_user.username %}
+                      <a href="{{ url_for('users.profile', user=user.username ) }}"><small>Edit</small></a>
+                  {% endif %}
+              {% endif %}
+          </div>
+        </div>
+        <div class="container col-11 mx-auto mt-1 container-border p-2 arrow_toggle mb-1">
+            <a class="btn profile-cate" data-toggle="collapse" href="#menu" aria-expanded="True">
+                <div class="d-flex justify-content-between">
+                <span class="">Category</span>
+                    <img class="profile-arrow" src="https://myblog-files-tom.s3.ca-central-1.amazonaws.com/img/down-a.png" alt="down-arrow">
+                </div>
+            </a>
+            <ul class="collapse show profile-ul p-0 m-0" id="menu">
+                <li class=""><a href="{{ url_for('users.static_profile', user=user.username ) }}">Profile</a></li>
+                <li class=""><a href="{{ url_for('users.blog_history', user=user.username ) }}">Blog History</a></li>
+            </ul>
+        </div>
+    </div>
+</div>

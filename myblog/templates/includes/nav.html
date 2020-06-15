@@ -1,0 +1,41 @@
+<header>
+    <nav class=" navbar navbar-light navbar-expand login-bar p-0 justify-content-end">
+        <div class="navbar-nav">
+            {% if current_user.is_authenticated %}
+                <a class="nav-item nav-link active " href="{{ url_for('users.profile') }}">{{ current_user.username }}'s Profile</a>
+                <a class="nav-item nav-link active " href="{{ url_for('users.logout') }}">Logout</a>
+            {% else %}
+                <a class="nav-item nav-link active " href="{{ url_for('users.register') }}">Register</a>
+                <a class="nav-item nav-link active " href="{{ url_for('users.login') }}">Login</a>
+            {% endif %}
+        </div>
+
+    </nav>
+    <nav class= "navbar navbar-light navbar-expand shadow-sm profile-bar breadcrumb p-0 mb-2">
+      <div class="container">
+          <div class="navbar-nav">
+              <a class="nav-item nav-link breadcrumb-item active
+                 {% if project %} text-primary {% endif %}"
+                 href="{{ url_for('main.project', user=user.username ) }}">Project
+                  {% if is_new %} <small><span class="glow badge text-white badge-style">N</span></small>{% endif %}</a>
+              <a class="nav-item nav-link breadcrumb-item active
+                {% if article %} text-primary {% endif %}" href="{{ url_for('main.article',user=user.username) }}"> Article</a>
+          </div>
+            {% if current_user.is_authenticated %}
+              {% if user.username == current_user.username %}
+                  <div class="dropdown show">
+                      <a class="nav-item nav-link btn nav_toggle" href="#"
+                         data-toggle="dropdown" id="new_item" aria-haspopup="true" aria-expanded="false">Upload new
+                          <img  class="nav-arrow" src="https://myblog-files-tom.s3.ca-central-1.amazonaws.com/img/down-a.png" alt="down-arrow">
+                      </a>
+                      <div class="dropdown-menu container-border" aria-labelledby="new_item" >
+                          <a href="{{ url_for('main.new_project')}}" class="dropdown-item">Project</a>
+                          <a href="{{ url_for('main.new_article')}}" class="dropdown-item">Ariticle</a>
+                      </div>
+                  </div>
+              {% endif %}
+            {% endif %}
+
+      </div>
+    </nav>
+</header>

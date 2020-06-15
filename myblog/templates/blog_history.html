@@ -1,0 +1,13 @@
+{% extends "index.html" %}
+{% block main %}
+    <div class="container container-border">
+    {% for date in posts.keys() %}
+        <h2 class="font-italic text-muted border-bottom">{{ date }}</h2>
+        {% for id, title in posts[date] %}
+            <ul class="p-0 m-0 list-unstyled">
+                <li><a href="{{ url_for('main.aproject', user=user.username, post_id=id) }}">{{ title }}</a></li>
+            </ul>
+        {% endfor %}
+    {% endfor %}
+    </div>
+{% endblock main %}

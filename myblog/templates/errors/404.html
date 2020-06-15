@@ -1,0 +1,10 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <div class="container container-border">
+        <h1>404</h1>
+        <h2>Oops! Page not found</h2>
+        <p>That page does not exit. Please go back</p>
+        <p>Go back to<a href="{{ url_for('main.home') }}"> home page?</a></p>
+
+    </div>
+{% endblock %}

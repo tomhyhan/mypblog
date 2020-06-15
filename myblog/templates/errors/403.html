@@ -1,0 +1,9 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <div class="container container-border">
+        <h1>403</h1>
+        <h2>You do not have permission to access this page</h2>
+        <p>Please check your account information</p>
+        <p>Go back to<a href="{{ url_for('main.home') }}"> home page?</a></p>
+    </div>
+{% endblock %}
