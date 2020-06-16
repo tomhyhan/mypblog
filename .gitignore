@@ -140,7 +140,7 @@ cython_debug/
 # detach db
 myblog/site.db
 
-
+tests
 myblog/practice2.py
-
+myblog/config_test.py
 

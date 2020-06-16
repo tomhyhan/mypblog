@@ -24,6 +24,7 @@ def test_client():
 
 @pytest.fixture
 def init_db(scope="session"):
+    db.session.close()
     db.drop_all()
     db.create_all()
 
@@ -37,15 +38,15 @@ def init_db(scope="session"):
     db.session.commit()
 
     # adding testing project data
-    project = Project(title="test", content="test", user_id=user.id,id=1)
-    project1 = Project(title="test", content="test", user_id=user1.id,id=2)
+    project = Project(title="test", content="test", user_id=user.id)
+    project1 = Project(title="test", content="test", user_id=user1.id)
     db.session.add(project)
     db.session.add(project1)
     db.session.commit()
 
     #adding test article data
-    article = Article(title="test", content="test", user_id=user.id,id=1)
-    article1 = Article(title="test", content="test", user_id=user1.id,id=2)
+    article = Article(title="test", content="test", user_id=user.id)
+    article1 = Article(title="test", content="test", user_id=user1.id)
     db.session.add(article)
     db.session.add(article1)
     db.session.commit()
@@ -63,8 +64,8 @@ def init_db(scope="session"):
     # tests happen HERE!
     yield db
 
+    db.session.close()
     db.drop_all()
-
 
 class AuthActions(object):
     def __init__(self, client):
